@@ -4,9 +4,8 @@ using UnityEngine;
 
 public static class PhysicalBlockStackManager
 {
-    private static bool inited = false;
-
     private static GameObject stackParent = null;
+    private static bool inited = false;
 
     #region Init Functions
     public static void OutSideInit()
@@ -36,7 +35,6 @@ public static class PhysicalBlockStackManager
         stackParent = new GameObject();
         stackParent.name = "[Stacks]";
     }
-
     public static void CreateBlockStackVisuals(List<BlockStack> stacks)
     {
         CheckInit();
@@ -49,11 +47,17 @@ public static class PhysicalBlockStackManager
 
         CheckParent();
 
+        Debug.Log(stacks.Count);
+
         foreach (BlockStack stack in stacks)
         {
             GameObject newPhysicalStack = new GameObject();
             newPhysicalStack.transform.parent = stackParent.transform;
+            newPhysicalStack.name = stack.grade;
 
+            PhysicalBlockStack newPhysicalStackScript = newPhysicalStack.AddComponent<PhysicalBlockStack>();
+            newPhysicalStackScript.SetStackData(stack);
+            newPhysicalStackScript.GeneratePhysicalBlockStack();
         }
     }
 }

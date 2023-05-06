@@ -13,10 +13,8 @@ public class BlockStack
     #endregion
 
     #region Member Variables
-    [SerializeField]
-    private string grade = "Default Grade";
-    [SerializeField]
-    private int layerSize = 1;
+    public string grade = "Default Grade";
+    public int layerSize = 1;
 
     //domainID, than cluster name, than standard id
     private Dictionary<string, Dictionary<string, List<BlockData>>> stackBlocks;

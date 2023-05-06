@@ -23,6 +23,11 @@ public class PhysicalBlockStack : MonoBehaviour
         {
             foreach(BlockData block in layer.blocks)
             {
+                if(block == null)
+                {
+                    continue;
+                }
+
                 CreatePhysicalBlock(block);
             }
         }
