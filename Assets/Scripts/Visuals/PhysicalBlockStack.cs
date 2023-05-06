@@ -23,16 +23,25 @@ public class PhysicalBlockStack : MonoBehaviour
         {
             foreach(BlockData block in layer.blocks)
             {
-
+                CreatePhysicalBlock(block);
             }
         }
     }
     private void CreatePhysicalBlock(BlockData data)
     {
-        GameObject blockOBJ = new GameObject();
-        blockOBJ.name = data.standardid;
-        blockOBJ.transform.parent = transform;
+        if(data == null)
+        {
+            Debug.LogError("ERROR - Could not create a block, data is null.");
+            return;
+        }
 
+        GameObject blockPrefab = PhysicalBlockDataBase.GetBlock((BlockTypes)data.mastery);
 
+        GameObject newBlock = Instantiate(blockPrefab);
+        newBlock.name = data.standardid;
+        newBlock.transform.parent = transform;
+
+        PhysicalBlock newBlockScript = newBlock.AddComponent<PhysicalBlock>();
+        newBlockScript.SetBlockData(data);
     }
 }
