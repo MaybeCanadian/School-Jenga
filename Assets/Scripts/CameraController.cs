@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController instance;
+
     public Transform currentViewTarget;
 
     public string startingViewTarget;
@@ -18,6 +20,18 @@ public class CameraController : MonoBehaviour
 
     public float currentDist;
 
+    #region Init Functions
+    private void Awake()
+    {
+        if (instance != this && instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
     private void Start()
     {
         oldMousePos = Input.mousePosition;
@@ -38,6 +52,34 @@ public class CameraController : MonoBehaviour
     {
         PhysicalBlockStackManager.OnPhysicalStacksGenerated-= OnPhysicalStacksGenerated;
     }
+    #endregion
+
+    #region Targeting
+    public void SetViewTarget(string name)
+    {
+        Transform newTarget = PhysicalBlockStackManager.GetStackCenter(name);
+
+        if(newTarget == null)
+        {
+            Debug.LogError("ERROR - New view target is null.");
+            return;
+        }
+
+        if(currentViewTarget == null)
+        {
+            currentViewTarget = newTarget;
+            return;
+        }
+
+        Vector3 displacement = newTarget.position - currentViewTarget.position;
+
+        transform.position += displacement;
+
+        currentViewTarget = newTarget;
+    }
+    #endregion
+
+    #region Updates
     private void Update()
     {
         if(currentViewTarget == null)
@@ -79,9 +121,12 @@ public class CameraController : MonoBehaviour
     {
         transform.LookAt(currentViewTarget);
     }
+    #endregion
 
+    #region Event Recievers
     private void OnPhysicalStacksGenerated()
     {
-        currentViewTarget = PhysicalBlockStackManager.GetStackCenter(startingViewTarget);
+        SetViewTarget(startingViewTarget);
     }
+    #endregion
 }
