@@ -15,6 +15,7 @@ public class BlockStack
     #region Member Variables
     public string grade = "Default Grade";
     public int layerSize = 1;
+    public float blockSpaceOffset;
 
     //domainID, than cluster name, than standard id
     private Dictionary<string, Dictionary<string, List<BlockData>>> stackBlocks;
@@ -23,14 +24,16 @@ public class BlockStack
     private List<BlockStackLayer> layers;
     #endregion
 
-    public BlockStack(string grade, int layerSize)
+    public BlockStack(string grade, int layerSize, float blockSpaceOffset = 0.5f)
     {
         this.grade = grade;
         this.layerSize = layerSize;
+        this.blockSpaceOffset = blockSpaceOffset;
 
         layers = new List<BlockStackLayer>();
 
         stackBlocks = new Dictionary<string, Dictionary<string, List<BlockData>>>();
+        this.blockSpaceOffset = blockSpaceOffset;
     }
 
     #region Block Control

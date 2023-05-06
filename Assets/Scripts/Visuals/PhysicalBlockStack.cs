@@ -19,20 +19,23 @@ public class PhysicalBlockStack : MonoBehaviour
             return;
         }
 
+        int layerNum = 0;
+
         foreach(BlockStackLayer layer in stackData.GetStackLayers())
         {
-            foreach(BlockData block in layer.blocks)
-            {
-                if(block == null)
-                {
-                    continue;
-                }
+            GenerateStackLayer(layer, layerNum);
 
-                CreatePhysicalBlock(block);
-            }
+            layerNum++;
         }
     }
-    private void CreatePhysicalBlock(BlockData data)
+    private void GenerateStackLayer(BlockStackLayer layer, int layerNum)
+    {
+        for(int i = 0; i < layer.blocks.Length; i++)
+        {
+            
+        }
+    }
+    private void CreatePhysicalBlock(BlockData data, Vector2Int pos)
     {
         if(data == null)
         {
