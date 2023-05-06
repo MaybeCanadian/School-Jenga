@@ -5,7 +5,8 @@ using UnityEngine;
 public static class PhysicalBlockStackManager
 {
     private static GameObject stackParent = null;
-    private static bool inited = false;
+
+    private static List<PhysicalStackSpawnMarker> spawnMarkers;
 
     #region Init Functions
     public static void OutSideInit()
@@ -14,17 +15,33 @@ public static class PhysicalBlockStackManager
     }
     private static void CheckInit()
     {
-        if(inited == false)
+        if(spawnMarkers == null)
         {
             Init();
         }
     }
     private static void Init()
     {
-        inited = true;
+        spawnMarkers = new List<PhysicalStackSpawnMarker>();
     }
     #endregion
 
+    #region Markers
+    public static void AddSpawnMarker(PhysicalStackSpawnMarker marker)
+    {
+        CheckInit();
+
+        spawnMarkers.Add(marker);
+    }
+    public static void RemoveSpawnMarker(PhysicalStackSpawnMarker marker)
+    {
+        CheckInit();
+
+        spawnMarkers.Remove(marker);
+    }
+    #endregion
+
+    #region Stacks
     private static void CheckParent()
     {
         if(stackParent != null)
@@ -60,9 +77,24 @@ public static class PhysicalBlockStackManager
             newPhysicalStack.transform.parent = stackParent.transform;
             newPhysicalStack.name = stack.grade;
 
+            newPhysicalStack.transform.position = FindAssoicatedMarkerPos(stack.grade);
+
             PhysicalBlockStack newPhysicalStackScript = newPhysicalStack.AddComponent<PhysicalBlockStack>();
             newPhysicalStackScript.SetStackData(stack);
             newPhysicalStackScript.GeneratePhysicalBlockStack();
         }
     }
+    private static Vector3 FindAssoicatedMarkerPos(string grade)
+    {
+        foreach(PhysicalStackSpawnMarker marker in spawnMarkers)
+        {
+            if(marker.grade == grade)
+            {
+                return marker.transform.position;
+            }
+        }
+
+        return Vector3.zero;
+    }
+    #endregion
 }

@@ -46,7 +46,13 @@ public class PhysicalBlockStack : MonoBehaviour
         newBlock.name = data.standardid;
         newBlock.transform.parent = transform;
 
+        newBlock.transform.position = DetermineBlockPos();
+
         PhysicalBlock newBlockScript = newBlock.AddComponent<PhysicalBlock>();
         newBlockScript.SetBlockData(data);
+    }
+    private Vector3 DetermineBlockPos()
+    {
+        return transform.position;
     }
 }
