@@ -13,15 +13,16 @@ public class BlockStack
     #endregion
 
     #region Member Variables
-    public string grade = "Default Grade";
-    public int layerSize = 1;
+    [SerializeField]
+    private string grade = "Default Grade";
+    [SerializeField]
+    private int layerSize = 1;
 
     //domainID, than cluster name, than standard id
     private Dictionary<string, Dictionary<string, List<BlockData>>> stackBlocks;
 
+    [SerializeField]
     private List<BlockStackLayer> layers;
-    private List<string> domaindIDs;
-    private List<string> clusterIDs;
     #endregion
 
     public BlockStack(string grade, int layerSize)
@@ -30,9 +31,6 @@ public class BlockStack
         this.layerSize = layerSize;
 
         layers = new List<BlockStackLayer>();
-
-        domaindIDs = new List<string>();
-        clusterIDs = new List<string>();
 
         stackBlocks = new Dictionary<string, Dictionary<string, List<BlockData>>>();
     }
@@ -56,7 +54,7 @@ public class BlockStack
 
             stackBlocks.Add(block.domainid, newDomain);
 
-            domaindIDs.Add(block.domainid);
+            //Debug.Log("Adding domain " + block.domainid);
         }
 
         if(!stackBlocks[block.domainid].ContainsKey(block.cluster))
@@ -65,9 +63,10 @@ public class BlockStack
 
             stackBlocks[block.domainid].Add(block.cluster, newCluster);
 
-            clusterIDs.Add(block.cluster);
+            //Debug.Log("Adding cluster " + block.cluster + " to domain " + block.domainid);
         }
 
+        //Debug.Log("adding block to " + block.domain + " " + block.cluster);
         stackBlocks[block.domainid][block.cluster].Add(block);
         
     }
@@ -78,6 +77,13 @@ public class BlockStack
     /// <param name="data"></param>
     public void PlaceBlockInLayers(BlockData data)
     {
+        if(layers.Count == 0)
+        {
+            BlockStackLayer firstLayer = new BlockStackLayer(layerSize);
+
+            layers.Add(firstLayer);
+        }
+
         BlockStackLayer currentLayer = layers.Last();
 
         if (currentLayer.PlaceBlockNext(data))
@@ -114,9 +120,6 @@ public class BlockStack
     /// </summary>
     public void GenerateLayers()
     {
-        domaindIDs.Sort();
-        clusterIDs.Sort();
-
         SortThroughDomainIDS();
 
         stackBlocks.Clear();
@@ -125,7 +128,7 @@ public class BlockStack
     }
     private void SortThroughDomainIDS()
     {
-        foreach(string domainID in domaindIDs)
+        foreach (string domainID in stackBlocks.Keys.ToList())
         {
             if(!stackBlocks.ContainsKey(domainID))
             {
@@ -140,9 +143,9 @@ public class BlockStack
     }
     private void SortThroughClusterIDS(string domainID)
     {
-        foreach (string clusterID in clusterIDs)
+        foreach (string clusterID in stackBlocks[domainID].Keys.ToList())
         {
-            if (!stackBlocks[domainID].ContainsKey(domainID))
+            if (!stackBlocks[domainID].ContainsKey(clusterID))
             {
                 Debug.LogError("ERROR - Skipped cluserid: " + clusterID + " in domainid: "+ domainID);
                 continue;
