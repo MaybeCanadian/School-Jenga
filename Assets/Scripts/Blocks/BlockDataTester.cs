@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class BlockDataTester : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public BlockDataCluster data = null;
+
+    private void OnEnable()
     {
-        
+        ConnectEvents();
+    }
+    private void OnDisable()
+    {
+        DisconnectEvents();
+    }
+    private void ConnectEvents()
+    {
+        BlockDataManager.OnDataLoaded += OnBlockDataLoaded;
+    }
+    private void DisconnectEvents() 
+    {
+        BlockDataManager.OnDataLoaded -= OnBlockDataLoaded;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnBlockDataLoaded()
     {
-        
+        data = BlockDataManager.GetBlockDataCluster();
     }
 }

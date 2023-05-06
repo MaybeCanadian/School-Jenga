@@ -71,11 +71,11 @@ public static class BlockDataManager
             return;
         }
 
-        OnDataLoaded?.Invoke();
-
         DisconnectAPIEvents();
 
         ConvertJSONtoBlocks(data);
+
+        OnDataLoaded?.Invoke();
     }
     private static void OnAPIErrorEvent(string uri, string error)
     {
@@ -114,6 +114,10 @@ public static class BlockDataManager
         blocksData = null;
 
         OnDataCleared?.Invoke();
+    }
+    public static BlockDataCluster GetBlockDataCluster()
+    {
+        return blocksData; 
     }
     #endregion
 }
