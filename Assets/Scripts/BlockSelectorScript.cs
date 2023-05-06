@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BlockSelectorScript : MonoBehaviour
 {
@@ -12,6 +15,8 @@ public class BlockSelectorScript : MonoBehaviour
     Camera mainCamera;
     public LayerMask blockLayerMask;
     private PhysicalBlock currentBlock = null;
+
+    List<Button> uiButtons;
     private void Awake()
     {
         mainCamera = Camera.main;
