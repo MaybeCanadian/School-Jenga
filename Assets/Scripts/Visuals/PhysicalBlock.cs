@@ -6,11 +6,11 @@ public class PhysicalBlock : MonoBehaviour
 {
     public BlockData blockData;
     private Color startColor;
-    private MeshRenderer renderer;
+    private MeshRenderer meshRenderer;
     private void Awake()
     {
-        renderer = GetComponent<MeshRenderer>();
-        startColor = renderer.material.color;
+        meshRenderer = GetComponent<MeshRenderer>();
+        startColor = GetComponent<Renderer>().material.color;
     }
     public void SetBlockData(BlockData data)
     {
@@ -18,14 +18,10 @@ public class PhysicalBlock : MonoBehaviour
     }
     public void SelectBlock()
     {
-        Debug.Log("Selected block " + blockData.standardid);
-
-        renderer.material.color = Color.red;
+        GetComponent<Renderer>().material.color = Color.red;
     }
     public void DeselectBlock()
     {
-        Debug.Log("Deselected block " + blockData.standardid);
-
-        renderer.material.color = startColor;
+        GetComponent<Renderer>().material.color = startColor;
     }
 }

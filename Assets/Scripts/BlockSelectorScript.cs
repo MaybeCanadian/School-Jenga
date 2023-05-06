@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class BlockSelectorScript : MonoBehaviour
 {
+    #region Event Dispatchers
+    public delegate void BlockSelectorEvent(PhysicalBlock block);
+    public static BlockSelectorEvent OnBlockSelectionChanged;
+    #endregion
+
     Camera mainCamera;
     public LayerMask blockLayerMask;
     private PhysicalBlock currentBlock = null;
@@ -21,6 +26,8 @@ public class BlockSelectorScript : MonoBehaviour
             }
 
             CheckForBlocks();
+
+            OnBlockSelectionChanged?.Invoke(currentBlock);
         }
     }
     private void CheckForBlocks()
