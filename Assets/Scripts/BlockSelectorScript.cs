@@ -12,6 +12,8 @@ public class BlockSelectorScript : MonoBehaviour
     public static BlockSelectorEvent OnBlockSelectionChanged;
     #endregion
 
+    public static BlockSelectorScript instance;
+
     Camera mainCamera;
     public LayerMask blockLayerMask;
     private PhysicalBlock currentBlock = null;
@@ -19,13 +21,21 @@ public class BlockSelectorScript : MonoBehaviour
     List<Button> uiButtons;
     private void Awake()
     {
-        mainCamera = Camera.main;
+        if(instance != this && instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+            mainCamera = Camera.main;
+        }
     }
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            if(currentBlock != null)
+            if (currentBlock != null)
             {
                 currentBlock.DeselectBlock();
                 currentBlock = null;

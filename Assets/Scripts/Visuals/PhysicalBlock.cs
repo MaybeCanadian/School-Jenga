@@ -92,4 +92,5 @@ public class PhysicalBlock : MonoBehaviour
         meshRenderer.enabled = true;
         col.enabled = true;
     }
+
 }
