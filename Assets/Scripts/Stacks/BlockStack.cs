@@ -14,7 +14,7 @@ public class BlockStack
 
     #region Member Variables
     public string grade = "Default Grade";
-    int layerSize = 1;
+    public int layerSize = 1;
 
     //domainID, than cluster name, than standard id
     private Dictionary<string, Dictionary<string, List<BlockData>>> stackBlocks;

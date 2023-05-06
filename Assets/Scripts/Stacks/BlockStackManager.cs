@@ -108,5 +108,27 @@ public static class BlockStackManager
 
         OnStacksCleared?.Invoke();
     }
+
+    /// <summary>
+    /// Returns a list of the current stacks.
+    /// </summary>
+    /// <returns></returns>
+    public static List<BlockStack> GetStacks()
+    {
+        List<BlockStack> stacks = new List<BlockStack>();
+
+        foreach(string key in blockStacks.Keys)
+        {
+            if(!blockStacks.ContainsKey(key))
+            {
+                Debug.LogError("ERROR - Had to skip key " + key + " when getting stack list.");
+                continue;
+            }
+
+            stacks.Add(blockStacks[key]);
+        }
+
+        return stacks;
+    }
     #endregion
 }

@@ -6,6 +6,10 @@ public class GameController : MonoBehaviour
 {
     public static GameController instance;
 
+    [Header("Stacks")]
+    [Tooltip("The number of blocks in each layer of the stacks")]
+    public int layerSize = 3;
+
     #region Init Functions
     private void Awake()
     {
@@ -24,9 +28,42 @@ public class GameController : MonoBehaviour
 
         BlockDataManager.LoadBlocksData();
     }
+    private void OnEnable()
+    {
+        ConnectEvents();
+    }
+    private void OnDisable()
+    {
+        DisconnectEvents();
+    }
     private void InitSystems()
     {
         BlockDataManager.OutSideInit();
+    }
+    private void ConnectEvents()
+    {
+        BlockDataManager.OnDataLoaded += OnBlockDataLoaded;
+
+        BlockStackManager.OnStacksGenerated += OnBlockStacksGenerated;
+    }
+    private void DisconnectEvents()
+    {
+        BlockDataManager.OnDataLoaded -= OnBlockDataLoaded;
+
+        BlockStackManager.OnStacksGenerated -= OnBlockStacksGenerated;
+    }
+    #endregion
+
+    #region Event Recievers
+    private void OnBlockDataLoaded()
+    {
+        BlockDataCluster cluster = BlockDataManager.GetBlockDataCluster();
+
+        BlockStackManager.CreateStacksFromData(cluster, layerSize);
+    }
+    private void OnBlockStacksGenerated()
+    {
+        Debug.Log("genrated");
     }
     #endregion
 }
