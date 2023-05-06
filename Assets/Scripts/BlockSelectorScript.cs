@@ -23,6 +23,7 @@ public class BlockSelectorScript : MonoBehaviour
             if(currentBlock != null)
             {
                 currentBlock.DeselectBlock();
+                currentBlock = null;
             }
 
             CheckForBlocks();
