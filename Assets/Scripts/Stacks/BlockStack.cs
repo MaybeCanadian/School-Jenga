@@ -7,14 +7,24 @@ public class BlockStack
     public string grade = "Default Grade";
     int layerSize = 1;
 
-    private List<BlockStackLayer> layers = new List<BlockStackLayer>();
-    private List<BlockData> stackBlocks = new List<BlockData>();
-    private List<string> domainIds = new List<string>();
+    //domainID, than cluster name, than standard id
+    private Dictionary<string, Dictionary<string, List<BlockData>>> stackBlocks;
+
+    private List<BlockStackLayer> layers;
+    private List<string> domaindIDs;
+    private List<string> clusterIDs;
 
     public BlockStack(string grade, int layerSize)
     {
         this.grade = grade;
         this.layerSize = layerSize;
+
+        layers = new List<BlockStackLayer>();
+
+        domaindIDs = new List<string>();
+        clusterIDs = new List<string>();
+
+        stackBlocks = new Dictionary<string, Dictionary<string, List<BlockData>>>();
     }
 
     public void AddBlockToStack(BlockData block)
@@ -24,19 +34,33 @@ public class BlockStack
             Debug.LogError("ERROR - Could not add a null block into a stack.");
             return;
         }
-
-        stackBlocks.Add(block);
-
-        if(!domainIds.Contains(block.domainid))
+        
+        if(!stackBlocks.ContainsKey(block.domainid))
         {
-            domainIds.Add(block.domainid);
+            Dictionary<string, List<BlockData>> newDomain = new Dictionary<string, List<BlockData>>();
+
+            stackBlocks.Add(block.domainid, newDomain);
+
+            domaindIDs.Add(block.domainid);
         }
+
+        if(!stackBlocks[block.domainid].ContainsKey(block.cluster))
+        {
+            List<BlockData> newCluster = new List<BlockData>();
+
+            stackBlocks[block.domainid].Add(block.cluster, newCluster);
+
+            clusterIDs.Add(block.cluster);
+        }
+
+        stackBlocks[block.domainid][block.cluster].Add(block);
+        
     }
     public void GenerateLayers()
     {
-        domainIds.Sort();
+        domaindIDs.Sort();
 
-        foreach(string domainID in domainIds)
+        foreach(string id in domaindIDs)
         {
 
         }
