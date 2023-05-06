@@ -7,6 +7,8 @@ public class PhysicalBlockStack : MonoBehaviour
     public BlockStack stackData;
     public List<PhysicalBlock> blocks = new List<PhysicalBlock>();
 
+    public GameObject stackCenter = null;
+
     public void SetStackData(BlockStack data)
     {
         stackData = data;
@@ -27,6 +29,8 @@ public class PhysicalBlockStack : MonoBehaviour
 
             layerNum++;
         }
+
+        DetermineCenter();
     }
     private void GenerateStackLayer(BlockStackLayer layer, int layerNum)
     {
@@ -79,5 +83,18 @@ public class PhysicalBlockStack : MonoBehaviour
 
         PhysicalBlock newBlockScript = newBlock.AddComponent<PhysicalBlock>();
         newBlockScript.SetBlockData(data);
+    }
+    private void DetermineCenter()
+    {
+        stackCenter = new GameObject();
+        stackCenter.transform.parent = transform;
+        stackCenter.name = "Stack Center";
+
+        stackCenter.transform.localPosition = Vector3.up * stackData.layerSpaceOffset * stackData.GetStackLayers().Count / 2.0f;
+    }
+
+    public Transform GetStackCenter()
+    {
+        return stackCenter.transform;
     }
 }

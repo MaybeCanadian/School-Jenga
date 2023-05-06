@@ -4,9 +4,15 @@ using UnityEngine;
 
 public static class PhysicalBlockStackManager
 {
-    private static GameObject stackParent = null;
+    #region Event Dispatchers
+    public delegate void PhysicalBlockStackEvent();
+    public static PhysicalBlockStackEvent OnPhysicalStacksGenerated;
+    public static PhysicalBlockStackEvent OnPhysicalStacksCleared;
+    #endregion
 
+    private static GameObject stackParent = null;
     private static List<PhysicalStackSpawnMarker> spawnMarkers;
+    private static Dictionary<string, PhysicalBlockStack> stacksDict;
 
     #region Init Functions
     public static void OutSideInit()
@@ -23,6 +29,7 @@ public static class PhysicalBlockStackManager
     private static void Init()
     {
         spawnMarkers = new List<PhysicalStackSpawnMarker>();
+        stacksDict = new Dictionary<string, PhysicalBlockStack>();
     }
     #endregion
 
@@ -77,24 +84,55 @@ public static class PhysicalBlockStackManager
             newPhysicalStack.transform.parent = stackParent.transform;
             newPhysicalStack.name = stack.grade;
 
-            newPhysicalStack.transform.position = FindAssoicatedMarkerPos(stack.grade);
+            Transform spawnTrans = FindAssoicatedMarkerPos(stack.grade);
+
+            Vector3 spawnPos = Vector3.zero;
+
+            if (spawnTrans != null)
+            {
+                spawnPos = spawnTrans.position;
+            }
+
+            newPhysicalStack.transform.position = spawnPos;
 
             PhysicalBlockStack newPhysicalStackScript = newPhysicalStack.AddComponent<PhysicalBlockStack>();
             newPhysicalStackScript.SetStackData(stack);
             newPhysicalStackScript.GeneratePhysicalBlockStack();
+
+            stacksDict.Add(stack.grade, newPhysicalStackScript);
         }
+
+        OnPhysicalStacksGenerated?.Invoke();
     }
-    private static Vector3 FindAssoicatedMarkerPos(string grade)
+    private static Transform FindAssoicatedMarkerPos(string grade)
     {
         foreach(PhysicalStackSpawnMarker marker in spawnMarkers)
         {
             if(marker.grade == grade)
             {
-                return marker.transform.position;
+                return marker.transform;
             }
         }
 
-        return Vector3.zero;
+        return null;
+    }
+    public static Transform GetStackCenter(string grade)
+    {
+        CheckInit();
+
+        if(!stacksDict.ContainsKey(grade))
+        {
+            Debug.LogError("ERROR - Could not locate stack for given name.");
+            return null;
+        }
+
+        return stacksDict[grade].GetStackCenter();
+    }
+    public static void ClearPhysicalStacks()
+    {
+        GameObject.Destroy(stackParent);
+
+        OnPhysicalStacksCleared?.Invoke();
     }
     #endregion
 }
