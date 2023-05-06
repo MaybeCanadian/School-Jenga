@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BlockStack
@@ -59,11 +60,78 @@ public class BlockStack
     public void GenerateLayers()
     {
         domaindIDs.Sort();
+        clusterIDs.Sort();
 
-        foreach(string id in domaindIDs)
+        SortThroughDomainIDS();
+
+        stackBlocks.Clear();
+    }
+    private void SortThroughDomainIDS()
+    {
+        foreach(string domainID in domaindIDs)
         {
+            if(!stackBlocks.ContainsKey(domainID))
+            {
+                Debug.LogError("ERROR - Skipped domainid: " + domainID);
+                continue;
+            }
 
+            SortThroughClusterIDS(domainID);
+
+            stackBlocks[domainID].Clear();
         }
+    }
+    private void SortThroughClusterIDS(string domainID)
+    {
+        foreach (string clusterID in clusterIDs)
+        {
+            if (!stackBlocks[domainID].ContainsKey(domainID))
+            {
+                Debug.LogError("ERROR - Skipped cluserid: " + clusterID + " in domainid: "+ domainID);
+                continue;
+            }
+
+            SortThroughStandardIDS(domainID, clusterID);
+
+            stackBlocks[domainID][clusterID].Clear();
+        }
+    }
+    private void SortThroughStandardIDS(string domainID, string clusterID)
+    {
+        List<BlockData> blocks = stackBlocks[domainID][clusterID];
+
+        List<string> standardIDS = new List<string>();
+
+        foreach(BlockData block in blocks)
+        {
+            standardIDS.Add(block.standardid);
+        }
+
+        standardIDS.Sort();
+
+        foreach(string standardID in standardIDS)
+        {
+            int index = -1;
+
+            for(int i = 0; i < blocks.Count; i++)
+            {
+                if (blocks[i].standardid == standardID)
+                {
+                    index = i;
+                    PlaceBlockInLayers(blocks[i]);
+                    break;
+                }
+            }
+
+            blocks.RemoveAt(index);
+        }
+
+        blocks.Clear();
+        standardIDS.Clear();
+    }
+    private void PlaceBlockInLayers(BlockData data) 
+    {
+        BlockStackLayer currentLayer =  layers.Last();
     }
 }
 
