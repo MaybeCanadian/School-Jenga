@@ -30,12 +30,20 @@ public class PhysicalBlockStack : MonoBehaviour
     }
     private void GenerateStackLayer(BlockStackLayer layer, int layerNum)
     {
-        for(int i = 0; i < layer.blocks.Length; i++)
+        Vector3 centerPos = transform.position;
+        centerPos.y += stackData.layerSpaceOffset * layerNum;
+
+        for (int i = 0; i < layer.blocks.Length; i++)
         {
-            
+            if (layer.blocks[i] == null)
+            {
+                continue;
+            }
+
+            CreatePhysicalBlock(layer.blocks[i], centerPos);
         }
     }
-    private void CreatePhysicalBlock(BlockData data, Vector2Int pos)
+    private void CreatePhysicalBlock(BlockData data, Vector3 pos)
     {
         if(data == null)
         {
@@ -49,13 +57,9 @@ public class PhysicalBlockStack : MonoBehaviour
         newBlock.name = data.standardid;
         newBlock.transform.parent = transform;
 
-        newBlock.transform.position = DetermineBlockPos();
+        newBlock.transform.position = pos;
 
         PhysicalBlock newBlockScript = newBlock.AddComponent<PhysicalBlock>();
         newBlockScript.SetBlockData(data);
-    }
-    private Vector3 DetermineBlockPos()
-    {
-        return transform.position;
     }
 }

@@ -16,6 +16,7 @@ public class BlockStack
     public string grade = "Default Grade";
     public int layerSize = 1;
     public float blockSpaceOffset;
+    public float layerSpaceOffset;
 
     //domainID, than cluster name, than standard id
     private Dictionary<string, Dictionary<string, List<BlockData>>> stackBlocks;
@@ -24,11 +25,12 @@ public class BlockStack
     private List<BlockStackLayer> layers;
     #endregion
 
-    public BlockStack(string grade, int layerSize, float blockSpaceOffset = 0.5f)
+    public BlockStack(string grade, int layerSize, float blockSpaceOffset = 3.0f, float layerSpaceOffset = 0.5f)
     {
         this.grade = grade;
         this.layerSize = layerSize;
         this.blockSpaceOffset = blockSpaceOffset;
+        this.layerSpaceOffset = layerSpaceOffset;
 
         layers = new List<BlockStackLayer>();
 
