@@ -3,8 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[System.Serializable]
 public class BlockStack
 {
+    #region Event Dispatchers
+    public delegate void BlockStackEvent();
+    public BlockStackEvent OnStackGenerated;
+    public BlockStackEvent OnStackCleared;
+    #endregion
+
+    #region Member Variables
     public string grade = "Default Grade";
     int layerSize = 1;
 
@@ -14,6 +22,7 @@ public class BlockStack
     private List<BlockStackLayer> layers;
     private List<string> domaindIDs;
     private List<string> clusterIDs;
+    #endregion
 
     public BlockStack(string grade, int layerSize)
     {
@@ -28,6 +37,7 @@ public class BlockStack
         stackBlocks = new Dictionary<string, Dictionary<string, List<BlockData>>>();
     }
 
+    #region Block Control
     public void AddBlockToStack(BlockData block)
     {
         if(block == null)
@@ -57,6 +67,38 @@ public class BlockStack
         stackBlocks[block.domainid][block.cluster].Add(block);
         
     }
+    private void PlaceBlockInLayers(BlockData data)
+    {
+        BlockStackLayer currentLayer = layers.Last();
+
+        if (currentLayer.PlaceBlockNext(data))
+        {
+            return;
+        }
+
+        BlockStackLayer newLayer = new BlockStackLayer(layerSize);
+
+        layers.Add(newLayer);
+
+        if (!newLayer.PlaceBlockNext(data))
+        {
+            Debug.LogError("ERROR - Could not place a block in a new layer, layer should be empty.");
+            return;
+        }
+    }
+    public void ClearBlockStack()
+    {
+        stackBlocks.Clear();
+        layers.Clear();
+
+        OnStackCleared?.Invoke();
+    }
+    #endregion
+
+    #region Stack Generation
+    /// <summary>
+    /// Generates the block stack using the sorted blocks, clears the stored sorted blocks.
+    /// </summary>
     public void GenerateLayers()
     {
         domaindIDs.Sort();
@@ -65,6 +107,8 @@ public class BlockStack
         SortThroughDomainIDS();
 
         stackBlocks.Clear();
+
+        OnStackGenerated?.Invoke();
     }
     private void SortThroughDomainIDS()
     {
@@ -129,12 +173,10 @@ public class BlockStack
         blocks.Clear();
         standardIDS.Clear();
     }
-    private void PlaceBlockInLayers(BlockData data) 
-    {
-        BlockStackLayer currentLayer =  layers.Last();
-    }
+    #endregion
 }
 
+[System.Serializable]
 public class BlockStackLayer
 {
     public BlockData[] blocks = new BlockData[3];
@@ -145,7 +187,14 @@ public class BlockStackLayer
         layerSize = (size > 0) ? size : 1;
         blocks = new BlockData[layerSize];
     }
-    public bool PlaceBlockAny(BlockData data, bool replace = false) 
+
+    /// <summary>
+    /// Places a block in the layer in the next available spot. Returns if it placed a block.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="replace"></param>
+    /// <returns></returns>
+    public bool PlaceBlockNext(BlockData data) 
     {
         for(int i = 0; i < blocks.Length; i++)
         {
@@ -156,17 +205,16 @@ public class BlockStackLayer
             }
         }
 
-        if(!replace)
-        {
-            return false;
-        }
-
-        int randomIndex = Random.Range(0, blocks.Length);
-
-        blocks[randomIndex] = data;
-
-        return true;
+        return false;
     }
+
+    /// <summary>
+    /// Places a block in the layer at given index. Returns if it placed a block.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="index"></param>
+    /// <param name="replace"></param>
+    /// <returns></returns>
     public bool PlaceBlockIndex(BlockData data, int index, bool replace = false)
     {
         if(index >= blocks.Length)
