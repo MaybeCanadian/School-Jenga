@@ -303,7 +303,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mastered
+  m_text: Learned
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -330,7 +330,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2.15
+  m_fontSize: 2.4
   m_fontSizeBase: 0.045
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -380,6 +380,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5864942770478172275}
     m_Modifications:
+    - target: {fileID: 3438218824437409465, guid: a153d54e4344a1a49ad23a3ce8c1920e, type: 3}
+      propertyPath: m_text
+      value: Learned
+      objectReference: {fileID: 0}
+    - target: {fileID: 3438218824437409465, guid: a153d54e4344a1a49ad23a3ce8c1920e, type: 3}
+      propertyPath: m_fontSize
+      value: 2.4
+      objectReference: {fileID: 0}
     - target: {fileID: 4968456900168693047, guid: a153d54e4344a1a49ad23a3ce8c1920e, type: 3}
       propertyPath: m_Name
       value: Block Side Text
