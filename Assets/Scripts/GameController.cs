@@ -63,7 +63,9 @@ public class GameController : MonoBehaviour
     }
     private void OnBlockStacksGenerated()
     {
-        Debug.Log("genrated");
+        List<BlockStack> stacks = BlockStackManager.GetStacks();
+
+        PhysicalBlockStackManager.CreateBlockStackVisuals(stacks);
     }
     #endregion
 }
