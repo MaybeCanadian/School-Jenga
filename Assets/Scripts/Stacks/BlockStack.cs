@@ -25,7 +25,7 @@ public class BlockStack
     private List<BlockStackLayer> layers;
     #endregion
 
-    public BlockStack(string grade, int layerSize, float blockSpaceOffset = 3.0f, float layerSpaceOffset = 0.5f)
+    public BlockStack(string grade, int layerSize, float blockSpaceOffset = 1.1f, float layerSpaceOffset = 0.5f)
     {
         this.grade = grade;
         this.layerSize = layerSize;

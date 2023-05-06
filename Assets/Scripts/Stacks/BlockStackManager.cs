@@ -37,7 +37,7 @@ public static class BlockStackManager
     /// </summary>
     /// <param name="dataCluster"></param>
     /// <param name="layerSize"></param>
-    public static void CreateStacksFromData(BlockDataCluster dataCluster, int layerSize) 
+    public static void CreateStacksFromData(BlockDataCluster dataCluster, int layerSize, float blockOffset = 1.1f, float layerOffset = 0.5f) 
     {
         if (blockStacks != null)
         {
@@ -66,7 +66,7 @@ public static class BlockStackManager
                 continue;
             }
 
-            BlockStack newStack = new BlockStack(block.grade, layerSize);
+            BlockStack newStack = new BlockStack(block.grade, layerSize, blockOffset, layerOffset);
 
             blockStacks.Add(block.grade, newStack);
 

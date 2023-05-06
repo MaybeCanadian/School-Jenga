@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
     [Header("Stacks")]
     [Tooltip("The number of blocks in each layer of the stacks")]
     public int layerSize = 3;
+    public float blockOffset = 1.1f;
+    public float layerOffset = 0.25f;
     public List<string> stackGradeIgnoreList;
 
     #region Init Functions
@@ -60,7 +62,7 @@ public class GameController : MonoBehaviour
     {
         BlockDataCluster cluster = BlockDataManager.GetBlockDataCluster();
 
-        BlockStackManager.CreateStacksFromData(cluster, layerSize);
+        BlockStackManager.CreateStacksFromData(cluster, layerSize, blockOffset, layerOffset);
     }
     private void OnBlockStacksGenerated()
     {

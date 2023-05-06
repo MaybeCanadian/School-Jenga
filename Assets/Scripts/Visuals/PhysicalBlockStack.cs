@@ -30,8 +30,23 @@ public class PhysicalBlockStack : MonoBehaviour
     }
     private void GenerateStackLayer(BlockStackLayer layer, int layerNum)
     {
-        Vector3 centerPos = transform.position;
-        centerPos.y += stackData.layerSpaceOffset * layerNum;
+        Vector3 centerPos = Vector3.up * stackData.layerSpaceOffset * layerNum;
+
+        Vector3 layerDirection;
+        float rotation;
+
+        if (layerNum % 2 == 0)
+        {
+            layerDirection = Vector3.right;
+            rotation = 00.0f;
+        }
+        else
+        {
+            layerDirection = Vector3.forward;
+            rotation = 90.0f;
+        }
+
+        centerPos -= layerDirection * stackData.blockSpaceOffset;
 
         for (int i = 0; i < layer.blocks.Length; i++)
         {
@@ -40,10 +55,12 @@ public class PhysicalBlockStack : MonoBehaviour
                 continue;
             }
 
-            CreatePhysicalBlock(layer.blocks[i], centerPos);
+            Vector3 spawnPos = centerPos + layerDirection * stackData.blockSpaceOffset * i;
+
+            CreatePhysicalBlock(layer.blocks[i], spawnPos, rotation);
         }
     }
-    private void CreatePhysicalBlock(BlockData data, Vector3 pos)
+    private void CreatePhysicalBlock(BlockData data, Vector3 pos, float rotation)
     {
         if(data == null)
         {
@@ -57,7 +74,8 @@ public class PhysicalBlockStack : MonoBehaviour
         newBlock.name = data.standardid;
         newBlock.transform.parent = transform;
 
-        newBlock.transform.position = pos;
+        newBlock.transform.localPosition = pos;
+        newBlock.transform.localRotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
         PhysicalBlock newBlockScript = newBlock.AddComponent<PhysicalBlock>();
         newBlockScript.SetBlockData(data);
