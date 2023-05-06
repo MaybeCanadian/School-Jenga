@@ -75,5 +75,13 @@ public class GameUIController : MonoBehaviour
     {
         CameraController.instance.SetViewTarget("8th Grade");
     }
+    public void OnTestMyStackPressed()
+    {
+        GameController.instance.TestMyStack();
+    }
+    public void OnResetPressed()
+    {
+        GameController.instance.ResetStack();
+    }
     #endregion
 }

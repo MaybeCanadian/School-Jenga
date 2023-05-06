@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    #region Event Dispatchers
+    public delegate void GamePlayEvent();
+    public static GamePlayEvent OnTestMyStack;
+    public static GamePlayEvent OnReset;
+    #endregion
+
     public static GameController instance;
 
     [Header("Stacks")]
@@ -71,4 +77,13 @@ public class GameController : MonoBehaviour
         PhysicalBlockStackManager.CreateBlockStackVisuals(stacks, stackGradeIgnoreList);
     }
     #endregion
+
+    public void TestMyStack()
+    {
+        OnTestMyStack?.Invoke();
+    }
+    public void ResetStack()
+    {
+        OnReset?.Invoke();
+    }
 }
