@@ -190,6 +190,13 @@ public class BlockStack
         standardIDS.Clear();
     }
     #endregion
+
+    #region Layers
+    public List<BlockStackLayer> GetStackLayers()
+    {
+        return layers;
+    }
+    #endregion
 }
 
 [System.Serializable]
