@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     [Header("Stacks")]
     [Tooltip("The number of blocks in each layer of the stacks")]
     public int layerSize = 3;
+    public List<string> stackGradeIgnoreList;
 
     #region Init Functions
     private void Awake()
@@ -65,7 +66,7 @@ public class GameController : MonoBehaviour
     {
         List<BlockStack> stacks = BlockStackManager.GetStacks();
 
-        PhysicalBlockStackManager.CreateBlockStackVisuals(stacks);
+        PhysicalBlockStackManager.CreateBlockStackVisuals(stacks, stackGradeIgnoreList);
     }
     #endregion
 }

@@ -83,8 +83,9 @@ public static class BlockStackManager
 
             blockStacks[key].GenerateLayers();
 
-            OnStacksGenerated?.Invoke();
         }
+
+        OnStacksGenerated?.Invoke();
     }
 
     /// <summary>

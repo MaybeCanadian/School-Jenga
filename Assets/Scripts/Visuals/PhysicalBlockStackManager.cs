@@ -35,7 +35,7 @@ public static class PhysicalBlockStackManager
         stackParent = new GameObject();
         stackParent.name = "[Stacks]";
     }
-    public static void CreateBlockStackVisuals(List<BlockStack> stacks)
+    public static void CreateBlockStackVisuals(List<BlockStack> stacks, List<string> ignore)
     {
         CheckInit();
 
@@ -51,6 +51,11 @@ public static class PhysicalBlockStackManager
 
         foreach (BlockStack stack in stacks)
         {
+            if(ignore.Contains(stack.grade))
+            {
+                continue;
+            }
+
             GameObject newPhysicalStack = new GameObject();
             newPhysicalStack.transform.parent = stackParent.transform;
             newPhysicalStack.name = stack.grade;
