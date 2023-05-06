@@ -38,6 +38,10 @@ public class BlockStack
     }
 
     #region Block Control
+    /// <summary>
+    /// Adds a block to the sorted blocks. Does not add directly to stack, requires a generation to place in stack.
+    /// </summary>
+    /// <param name="block"></param>
     public void AddBlockToStack(BlockData block)
     {
         if(block == null)
@@ -67,7 +71,12 @@ public class BlockStack
         stackBlocks[block.domainid][block.cluster].Add(block);
         
     }
-    private void PlaceBlockInLayers(BlockData data)
+
+    /// <summary>
+    /// Places a block in the most current layer. If layer is full creates a new layer to place block in.
+    /// </summary>
+    /// <param name="data"></param>
+    public void PlaceBlockInLayers(BlockData data)
     {
         BlockStackLayer currentLayer = layers.Last();
 
@@ -86,6 +95,10 @@ public class BlockStack
             return;
         }
     }
+
+    /// <summary>
+    /// Clears the block stack, includes the layers as well as any stored sorted blocks.
+    /// </summary>
     public void ClearBlockStack()
     {
         stackBlocks.Clear();
